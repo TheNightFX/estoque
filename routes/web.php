@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::get('/home', function(){
-    return view('home.nav');
+    return view('home.home');
 })->name('home');
 
 Route::get('/listar_materiais', function(){
