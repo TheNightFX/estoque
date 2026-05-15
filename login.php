@@ -1,40 +1,44 @@
 <?php
+// Certifique-se de que session_start() seja a PRIMEIRA coisa no arquivo
+if(!isset($_SESSION)){
+    session_start();
+}
+
 include('conexao.php');
 
-if(isset($_POST['usuario']) && isset($_POST['senha'])) {
+if(isset($_POST['nome']) && isset($_POST['senha'])) { // Alterado de || para && (precisa dos dois)
     
-    if(strlen($_POST['usuario']) == 0) {
-        echo "Preencha seu usuario";
-    } else if(strlen($_POST['senha']) == 0) {
+    // Trim remove espaços em branco acidentais
+    $usuario_post = trim($_POST['nome']);
+    $senha_post = trim($_POST['senha']);
+
+    if(empty($usuario_post)) {
+        echo "Preencha seu usuário";
+    } else if(empty($senha_post)) {
         echo "Preencha sua senha";
-    } else{
+    } else {
 
-        $usuario = $mysqli->real_escape_string($_POST['usuario']);
-        $senha = $mysqli->real_escape_string($_POST['senha']);
+        $usuario = $mysqli->real_escape_string($usuario_post);
+        $senha = $mysqli->real_escape_string($senha_post);
 
-        $sql_code = "SELECT * FROM usuarios WHERE usuario = '$usuario' AND senha = '$senha'";
-        $sql_query = $mysqli->query($sql_code) or die("Falha na execução do código SQL:" . $mysqli->error);
+        $sql_code = "SELECT * FROM usuarios WHERE nome = '$usuario' AND senha = '$senha'";
+        $sql_query = $mysqli->query($sql_code) or die("Falha na execução do código SQL: " . $mysqli->error);
 
         $quantidade = $sql_query->num_rows;
 
         if($quantidade == 1){
+            $dados_usuario = $sql_query->fetch_assoc();
 
-            $usuario = $sql_query->fetch_assoc();
+            $_SESSION['usuario'] = $dados_usuario['id'];
+            $_SESSION['nome'] = $dados_usuario['nome'];
 
-            if(!isset($_SESSION)){
-                session_start();
-            }
+            // O exit() após o header impede que o restante do script PHP continue rodando
+            header("Location: home.html");
+            exit(); 
 
-            $_SESSION['usuario'] = $usuario['id'];
-            $_SESSION['nome'] = $usuario['nome'];
-
-            header("Location: home.html/");
-            exit();
-
-        } else{
-            echo "Falha ao logar! Usuario ou senha invalidos";
+        } else {
+            echo "Falha ao logar! Usuário ou senha inválidos";
         }
-
     }
 }
 ?>
@@ -62,7 +66,7 @@ if(isset($_POST['usuario']) && isset($_POST['senha'])) {
         <img src="image/6cta_logo.png" alt="Logo 6CTA" class="logo">
         <h2>Controle de Estoque</h2>
         <form action="" method="POST">
-            <input name="usuario "type="text" placeholder="Usuário" required>
+            <input name="nome" type="text" placeholder="Usuário" required>
             <input name="senha" type="password" placeholder="Senha" required>
             <button type="submit">Entrar</button>
         </form>
