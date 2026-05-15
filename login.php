@@ -2,6 +2,7 @@
 // Certifique-se de que session_start() seja a PRIMEIRA coisa no arquivo
 if(!isset($_SESSION)){
     session_start();
+    
 }
 
 include('conexao.php');
@@ -29,11 +30,11 @@ if(isset($_POST['nome']) && isset($_POST['senha'])) { // Alterado de || para && 
         if($quantidade == 1){
             $dados_usuario = $sql_query->fetch_assoc();
 
-            $_SESSION['usuario'] = $dados_usuario['id'];
+            $_SESSION['id'] = $dados_usuario['id'];
             $_SESSION['nome'] = $dados_usuario['nome'];
 
             // O exit() após o header impede que o restante do script PHP continue rodando
-            header("Location: home.html");
+            header("Location: home.php");
             exit(); 
 
         } else {
