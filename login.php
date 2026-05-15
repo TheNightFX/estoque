@@ -5,7 +5,7 @@ if(!isset($_SESSION)){
     
 }
 
-include('conexao.php');
+include('page/conexao.php');
 
 if(isset($_POST['nome']) && isset($_POST['senha'])) { // Alterado de || para && (precisa dos dois)
     
@@ -34,15 +34,17 @@ if(isset($_POST['nome']) && isset($_POST['senha'])) { // Alterado de || para && 
             $_SESSION['nome'] = $dados_usuario['nome'];
 
             // O exit() após o header impede que o restante do script PHP continue rodando
-            header("Location: home.php");
+            header("Location: page/home.php");
             exit(); 
 
         } else {
-            echo "Falha ao logar! Usuário ou senha inválidos";
+            $erro = "Usuário ou senha incorretos!";
         }
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -50,30 +52,20 @@ if(isset($_POST['nome']) && isset($_POST['senha'])) { // Alterado de || para && 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela de Login</title>
     <link rel="stylesheet" href="css/login.css">
-    <style>
-          body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url(image/Imagem1.png) no-repeat center/cover fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-    </style>
 </head>
-<body>
-    <div class="login-container">
+<body class="login-body">
+    <div class="login">
         <img src="image/6cta_logo.png" alt="Logo 6CTA" class="logo">
         <h2>Controle de Estoque</h2>
+         <?php if(isset($erro)) {echo "<p style='color: red; font-weight: bold;'>$erro</p>"; } ?>
         <form action="" method="POST">
             <input name="nome" type="text" placeholder="Usuário" required>
             <input name="senha" type="password" placeholder="Senha" required>
             <button type="submit">Entrar</button>
         </form>
         <div class="footer-links">
-            <p>Esqueceu a senha? <a href="#">Clique aqui</a></p>
-            <p>Não tem conta? <a href="#">Cadastre-se</a></p>
+            <p>Esqueceu a senha? <a href="http://glpi.6cta.eb.mil.br/index.php?noAUTO=1">Clique aqui</a></p>
+            <p>Não tem conta? <a href="http://glpi.6cta.eb.mil.br/index.php?noAUTO=1">Cadastre-se</a></p>
         </div>
     </div>
 

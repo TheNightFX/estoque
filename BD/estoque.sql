@@ -21,8 +21,7 @@ create table usuarios(
     foreign key (privilegio_id) references privilegios(id)
 );
 
-insert into usuarios (nome, senha, posto, secao, privilegio_id) values ('admin', 'Wctlct@', 'admin', 'STI', 1);
-select * from usuarios;
+
 create table usuarioCautela(
 	id int primary key auto_increment,
     nome varchar(100) not null,
@@ -42,7 +41,6 @@ create table privilegios(
 	id int primary key auto_increment,
     nome varchar(20) not null unique
 );
-insert into privilegios (nome) values ('Administrador'), ('Usuario');
 
 create table relatorio(
 	id int primary key auto_increment,
@@ -68,4 +66,6 @@ LEFT JOIN produtos p ON r.produto_id = p.id
 LEFT JOIN usuarios u ON r.usuario_id = u.id 
 LEFT JOIN cautela c ON r.cautela_id = c.id; 
 
-
+insert into privilegios (nome) values ('Administrador'), ('Usuario');
+insert into usuarios (nome, senha, posto, secao, privilegio_id) values ('admin', '123', 'admin', 'STI', 1);
+select * from usuarios;

@@ -4,22 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Materiais - Controle de Estoque</title>
-    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="../css/estilo.css">
+
 </head>
 <body>
-    <div id="mySidebar" class="sidebar">
-        <span class="close-btn" onclick="toggleMenu()">×</span>
-        <a href="home.html">Início</a>
-        <a href="#">Perfil</a>
-        <a href="#">Configurações</a>
-        <a href="#">Sair</a>
-    </div>
 
-    <div class="header">
-        <div class="menu-icon" onclick="toggleMenu()">☰</div>
-        <div class="welcome-text">Bem-Vindo, Sgt Hudson!</div>
-        <div class="user-avatar"></div>
-    </div>
+    <?php include ("header.php");?>
 
     <div class="main-content">
         
@@ -32,25 +22,25 @@
                         <th style="width: 5%;">Nº</th>
                         <th style="width: 15%;">Material</th>
                         <th style="width: 10%;">Quantidade</th>
-                        <th style="width: 10%;">Seção</th>
-                        <th style="width: 15%;">Número do Patrimônio</th>
-                        <th style="width: 15%;">Status</th>
-                        <th style="width: 30%;">Descrição</th>
+                        <th style="width: 10%;">Seção/OM</th>
+                        <th style="width: 15%;">Nome</th>
+                        <th style="width: 15%;">Posto/Graduação</th>
+                        <th style="width: 30%;">Telefone</th>
+                        <th style="width: 30%;">Ação</th>
                     </tr>
                 </thead>
                 <tbody id="tabela-corpo">
                     <tr>
                         <td>1</td>
                         <td>Monitor 24"</td>
-                        <td>05</td>
-                        <td>TI</td>
-                        <td>PAT-2024-001</td>
-                        <td>Cautelado</td>
-                        <td>Monitor LED Full HD Dell</td>
+                        <td>01</td>
+                        <td>TI/B ADM AP CMO</td>
+                        <td>FULANO</td>
+                        <td>SGT</td>
+                        <td>(67)9 9999-9999</td>
+                        <td>?????????</td>
                     </tr>
-                    <tr>
-                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                    </tr>
+                    
                 </tbody>
             </table>
         </div>

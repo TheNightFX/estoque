@@ -3,9 +3,9 @@
        
  
  
-        body {
+        .login-body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url(image/Imagem1.png);
+            background: url(../image/Imagem1.png) no-repeat center/cover fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -14,7 +14,15 @@
         }
 
         /* Container do Formulário */
-        .login-container {
+        .login-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #dddfdf;
+        }
+
+        .login {
             background-color: #ffffff ;
             padding: 40px;
             border-radius: 15px; /* Bordas arredondadas */
