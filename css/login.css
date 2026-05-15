@@ -1,0 +1,89 @@
+
+        /* Estilização Geral */
+       
+ 
+ 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url(image/Imagem1.png);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container do Formulário */
+        .login-container {
+            background-color: #ffffff ;
+            padding: 40px;
+            border-radius: 15px; /* Bordas arredondadas */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            max-height: 700px;
+            text-align: center;
+            opacity: 0.8;
+            
+        }
+
+        .logo{
+            height: 112px;
+            width: 80px;
+            display: block;
+            margin-bottom: 25px;
+
+
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+        }
+
+        /* Campos de Entrada */
+        input[type="text"],
+        input[type="password"] {
+            background: transparent;
+            width: 250px;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-bottom: 2px solid #080808;
+            font-size: 18px;
+            color: #1a1a1a;
+            outline: none;
+            transition: border-bottom-color 0.3;
+            box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+        }
+
+        /* Botão de Login */
+        button {
+            width: 250px;
+            padding: 12px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
