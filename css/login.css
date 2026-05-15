@@ -27,12 +27,16 @@
             
         }
 
+        .logo-container{
+            display: flex;
+            justify-content: center;
+        };
+
         .logo{
             height: 112px;
             width: 80px;
             display: block;
             margin-bottom: 25px;
-
 
         }
 
