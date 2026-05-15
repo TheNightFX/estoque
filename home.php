@@ -1,6 +1,7 @@
 
-
-
+<?php
+include('protect.php');
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -20,7 +21,7 @@
 
     <div class="header">
         <div class="menu-icon" onclick="toggleMenu()">☰</div>
-        <div class="welcome-text">Bem-Vindo, Sgt Hudson!</div>
+        <div class="welcome-text">Bem-Vindo, <?php echo $_SESSION['nome']; ?></div>
         <div class="user-avatar"></div>
     </div>
 
