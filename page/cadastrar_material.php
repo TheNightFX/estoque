@@ -1,6 +1,47 @@
 <?php
 
+include("protect.php");
 include("conexao.php");
+
+if(
+    isset($_POST['nome']) &&
+    isset($_POST['descricao']) &&
+    isset($_POST['secao']) &&
+    isset($_POST['quantidade']) &&
+    isset($_POST['data_entrada'])
+) {
+    $nome_post = trim($_POST['nome']);
+    $descricao_post = trim($_POST['descricao']);
+    $secao_post = trim($_POST['secao']);
+    $quantidade_post = trim($_POST['quantidade']);
+    $data_entrada_post = trim($_POST['data_entrada']);
+    $data_saida_post = isset($_POST['data_saida']) ? trim($_POST['data_saida']) : "";
+
+    if(empty($nome_post)) {
+        $erro = "Preencha o nome do material.";
+    } else if(empty($secao_post)) {
+        $erro = "Preencha a seção do material.";
+    } else if($quantidade_post === "" || !is_numeric($quantidade_post) || $quantidade_post < 0) {
+        $erro = "Preencha uma quantidade válida.";
+    } else if(empty($data_entrada_post)) {
+        $erro = "Preencha a data de entrada.";
+    } else {
+        $nome = $mysqli->real_escape_string($nome_post);
+        $descricao = $mysqli->real_escape_string($descricao_post);
+        $secao = $mysqli->real_escape_string($secao_post);
+        $quantidade = (int) $quantidade_post;
+        $data_entrada = $mysqli->real_escape_string($data_entrada_post);
+        $data_saida = $mysqli->real_escape_string($data_saida_post);
+
+        $sql_code = "INSERT INTO produtos (nome, descricao, secao, quantidade, data_entrada, data_saida) VALUES ('$nome', '$descricao', '$secao', $quantidade, '$data_entrada', '$data_saida')";
+
+        if($mysqli->query($sql_code)) {
+            $sucesso = "Material cadastrado com sucesso.";
+        } else {
+            $erro = "Falha ao cadastrar material: " . $mysqli->error;
+        }
+    }
+}
 
 $opcoes_limite = [5, 10, 20, 50];
 $itens_por_pagina = isset($_GET['limite']) ? (int) $_GET['limite'] : 10;
@@ -50,7 +91,7 @@ $parametros_paginacao = http_build_query([
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Materiais - Controle de Estoque</title>
+    <title>Cadastro de Materiais - Controle de Estoque</title>
     <link rel="stylesheet" href="../css/estilo.css">
 </head>
 <body>
@@ -58,9 +99,22 @@ $parametros_paginacao = http_build_query([
     <?php include ("header.php");?>
 
     <div class="main-content">
-        <a href="cadastrar_material.php">
-            <button class="btn-cadastro">Cadastrar Material</button>
-        </a>
+        <div class="form-material">
+            <h3>Cadastro de Material</h3>
+
+            <?php if(isset($erro)) { echo "<p class='mensagem-erro'>$erro</p>"; } ?>
+            <?php if(isset($sucesso)) { echo "<p class='mensagem-sucesso'>$sucesso</p>"; } ?>
+
+            <form action="" method="POST">
+                <input name="nome" type="text" placeholder="Material" required>
+                <textarea name="descricao" placeholder="Descrição"></textarea>
+                <input name="secao" type="text" placeholder="Seção" required>
+                <input name="quantidade" type="number" placeholder="Quantidade" min="0" required>
+                <input name="data_entrada" type="date" required>
+                <input name="data_saida" type="date">
+                <button type="submit" class="btn-cadastro">Cadastrar Material</button>
+            </form>
+        </div>
 
         <form class="controle-paginacao" action="" method="GET">
             <div class="campo-pesquisa">
@@ -86,7 +140,7 @@ $parametros_paginacao = http_build_query([
             </div>
 
             <button type="submit">Pesquisar</button>
-            <a href="materiais.php" class="btn-limpar">Limpar</a>
+            <a href="cadastrar_material.php" class="btn-limpar">Limpar</a>
         </form>
 
         <div class="table-container">
@@ -141,18 +195,6 @@ $parametros_paginacao = http_build_query([
             <button class="btn-inicio">Inicio</button>
         </a>
     </div>
-   <script>
-        let menuAberto = false;
-        function toggleMenu() {
-            const sidebar = document.getElementById("mySidebar");
-            if (!menuAberto) {
-                sidebar.style.width = "250px";
-            } else {
-                sidebar.style.width = "0";
-            }
-            menuAberto = !menuAberto;
-        }
-    </script>
 
 </body>
 </html>

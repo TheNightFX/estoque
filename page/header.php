@@ -3,12 +3,12 @@ include('protect.php');
 ?>
 
 <div id="mySidebar" class="sidebar">
-    <a href="home.php"><img src="../image/6cta_logo.png" alt="Logo 6CTA" class="logo"></a>
+    <a href="home.php" class="logo-link"><img src="../image/6cta_logo.png" alt="Logo 6CTA" class="logo"></a>
     <span class="close-btn" onclick="toggleMenu()">×</span>
     <a href="#">Perfil</a>
     <a href="cadastro.php">Cadastro Usuario</a>
     <a href="#">Configurações</a>
-    <a href="#">Sair</a>
+    <a href="logout.php">Sair</a>
 </div>
 
 <div class="header">
