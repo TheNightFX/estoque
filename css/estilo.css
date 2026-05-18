@@ -69,6 +69,21 @@
 
         .sidebar a:hover { background-color: #34495e; }
 
+        .sidebar .logo-link {
+            display: flex;
+            justify-content: center;
+            padding: 0 25px 20px;
+        }
+
+        .sidebar .logo-link:hover {
+            background-color: transparent;
+        }
+
+        .sidebar .logo {
+            display: block;
+            max-width: 140px;
+        }
+
         .sidebar .close-btn {
             color: #d1d5db;
             position: absolute;
@@ -199,3 +214,298 @@
         /* Estilo para quando a linha estiver sendo lida do banco */
         tbody tr:nth-child(even) { background-color: rgba(0,0,0,0.05); }
         tbody tr:hover { background-color: rgba(111, 188, 240, 0.2); }
+
+        .form-material {
+            width: 100%;
+            background-color: #f3f4f6;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            padding: 25px;
+        }
+
+        .form-material h3 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-material form {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .form-material input,
+        .form-material textarea {
+            border: 1px solid #9ca3af;
+            border-radius: 8px;
+            font-size: 15px;
+            padding: 12px;
+            width: 100%;
+        }
+
+        .form-material textarea {
+            grid-column: span 2;
+            min-height: 45px;
+            resize: vertical;
+        }
+
+        .form-material .btn-cadastro {
+            margin-bottom: 0;
+            width: 100%;
+        }
+
+        .mensagem-erro {
+            color: #b91c1c;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .mensagem-sucesso {
+            color: #166534;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .mensagem-info {
+            color: #374151;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .paginacao {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .paginacao a {
+            background-color: #d1d5db;
+            border-radius: 8px;
+            color: #1a1a1a;
+            font-weight: bold;
+            min-width: 40px;
+            padding: 10px 14px;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .paginacao a:hover,
+        .paginacao .pagina-ativa {
+            background-color: #4a83a8;
+            color: #ffffff;
+        }
+
+        .controle-paginacao {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .campo-pesquisa {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .campo-limite {
+            align-items: center;
+            display: flex;
+            gap: 10px;
+        }
+
+        .controle-paginacao label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .campo-limite label {
+            margin-bottom: 0;
+        }
+
+        .controle-paginacao input,
+        .controle-paginacao select {
+            border: 1px solid #9ca3af;
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        .controle-paginacao input {
+            width: 100%;
+        }
+
+        .controle-paginacao select {
+            cursor: pointer;
+        }
+
+        .controle-paginacao button,
+        .btn-limpar {
+            background-color: #d1d5db;
+            border: none;
+            border-radius: 8px;
+            color: #1a1a1a;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 22px;
+            padding: 9px 18px;
+            text-decoration: none;
+            transition: background 0.3s;
+            width: auto;
+        }
+
+        .controle-paginacao button:hover,
+        .btn-limpar:hover {
+            background-color: #bdc3c7;
+        }
+
+        .acoes-material {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-editar,
+        .btn-excluir,
+        .btn-devolver,
+        .btn-cancelar {
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 8px 12px;
+            text-decoration: none;
+        }
+
+        .btn-editar {
+            background-color: #4a83a8;
+        }
+
+        .btn-excluir {
+            background-color: #b91c1c;
+        }
+
+        .btn-devolver {
+            background-color: #166534;
+        }
+
+        .btn-cancelar {
+            align-items: center;
+            background-color: #6b7280;
+            display: flex;
+            justify-content: center;
+            min-height: 43px;
+        }
+
+        .linha-selecionavel {
+            cursor: pointer;
+        }
+
+        .linha-selecionavel:hover {
+            background-color: rgba(74, 131, 168, 0.25);
+        }
+
+        .form-material input[readonly],
+        .form-material textarea[readonly],
+        .form-material input:disabled,
+        .form-material button:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .modal-devolucao {
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.45);
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            left: 0;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .modal-devolucao-conteudo {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            max-height: 80vh;
+            max-width: 520px;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+            width: 100%;
+        }
+
+        .modal-devolucao-conteudo h3 {
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .modal-fechar {
+            background-color: #b91c1c;
+            border-radius: 50%;
+            height: 32px;
+            padding: 0;
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            width: 32px;
+        }
+
+        .lista-devolucao {
+            display: grid;
+            gap: 10px;
+        }
+
+        .item-devolucao {
+            background-color: #f3f4f6;
+            border-left: 4px solid #4a83a8;
+            border-radius: 6px;
+            display: grid;
+            gap: 4px;
+            padding: 12px;
+        }
+
+        .btn-ver-cautelas {
+            background-color: #4a83a8;
+            border-radius: 8px;
+            color: #ffffff;
+            display: block;
+            font-weight: bold;
+            margin: 16px auto 0;
+            padding: 10px 16px;
+            text-align: center;
+            text-decoration: none;
+            width: fit-content;
+        }
+
+        @media (max-width: 900px) {
+            .form-material form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-material textarea {
+                grid-column: span 1;
+            }
+
+            .controle-paginacao {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .controle-paginacao button,
+            .btn-limpar {
+                margin-top: 0;
+                text-align: center;
+            }
+        }
