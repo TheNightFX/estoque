@@ -36,6 +36,7 @@ if($sql_tabela_cautelas && $sql_tabela_cautelas->num_rows > 0) {
         WHERE p.secao = '$secao_usuario_sql'
         AND cm.data_devolucao IS NULL
         AND cm.data_prevista_devolucao IS NOT NULL
+        AND cm.data_prevista_devolucao IN (CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 DAY))
         ORDER BY cm.data_prevista_devolucao ASC
         LIMIT 10
     ";
@@ -93,6 +94,11 @@ if($sql_tabela_cautelas && $sql_tabela_cautelas->num_rows > 0) {
         <a href="cautela.php" class="btn-card btn-dark-blue">
             <span style="font-size: 80px; margin-right: 10px;">📋</span>
             Cautela de Material
+        </a>
+
+        <a href="relatorio.php" class="btn-card btn-dark-blue">
+            <span style="font-size: 80px; margin-right: 10px;">📃</span>
+            Relatório
         </a>
     </div>
 
