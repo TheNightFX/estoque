@@ -246,6 +246,10 @@ $parametros_paginacao = http_build_query([
         <a href="home.php">
             <button class="btn-inicio">Inicio</button>
         </a>
+        
+        <a href="materiais.php">
+            <button class="btn-inicio">Voltar</button>
+        </a>
     </div>
 
 </body>

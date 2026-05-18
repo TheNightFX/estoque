@@ -185,17 +185,18 @@ $parametros_paginacao = http_build_query([
                     <?php while($cautela = $sql_cautelas_query_exec->fetch_assoc()) { ?>
                     <tr>
                         <td><?php echo $numero_linha; ?></td>
-                        <td><?php echo htmlspecialchars($cautela['material']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['descricao']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['secao']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['quantidade_cautelada']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['responsavel_nome']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['responsavel_secao']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['responsavel_telefone']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['data_cautela']); ?></td>
-                        <td><?php echo htmlspecialchars($cautela['data_prevista_devolucao']); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['material'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['descricao'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['secao'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['quantidade_cautelada'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['responsavel_nome'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['responsavel_secao'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['responsavel_telefone'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['data_cautela'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($cautela['data_prevista_devolucao'] ?? ''); ?></td>
                         <td>
                             <div class="acoes-material">
+                                <a class="btn-editar" style="background-color: #2c3e50; color: white;" href="cautela_pdf.php?id=<?php echo htmlspecialchars($cautela['cautela_id']); ?>" target="_blank">Imprimir</a>
                                 <a class="btn-editar" href="cautela_material.php?editar_cautela=<?php echo htmlspecialchars($cautela['cautela_id']); ?>">Editar</a>
                                 <a class="btn-devolver" href="?devolver=<?php echo htmlspecialchars($cautela['cautela_id']); ?>&<?php echo $parametros_paginacao; ?>" onclick="return confirm('Deseja marcar a devolucao deste material?')">Devolver</a>
                             </div>
