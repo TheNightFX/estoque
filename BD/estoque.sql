@@ -16,6 +16,29 @@ create table secoes(
     nome varchar(50) not null unique
 );
 
+create table cautela(
+	id int primary key auto_increment,
+    status boolean not null default false
+);
+
+create table privilegios(
+	id int primary key auto_increment,
+    nome varchar(20) not null unique
+);
+
+create table cautelas_materiais(
+	id int primary key auto_increment,
+    produto_id int not null,
+    quantidade_cautelada int not null,
+    responsavel_nome varchar(100) not null,
+    responsavel_secao varchar(50) not null,
+    responsavel_telefone varchar(30),
+    data_cautela datetime not null default current_timestamp,
+    data_prevista_devolucao date,
+    data_devolucao datetime,
+    foreign key (produto_id) references produtos(id)
+);
+
 create table usuarios(
 	id int primary key auto_increment,
     nome varchar(100) not null,
@@ -35,29 +58,6 @@ create table usuarioCautela(
     telefone varchar(30) not null,
     cautela_id int not null,
     foreign key (cautela_id) references cautela(id)
-);
-
-create table cautela(
-	id int primary key auto_increment,
-    status boolean not null default false
-);
-
-create table cautelas_materiais(
-	id int primary key auto_increment,
-    produto_id int not null,
-    quantidade_cautelada int not null,
-    responsavel_nome varchar(100) not null,
-    responsavel_secao varchar(50) not null,
-    responsavel_telefone varchar(30),
-    data_cautela datetime not null default current_timestamp,
-    data_prevista_devolucao date,
-    data_devolucao datetime,
-    foreign key (produto_id) references produtos(id)
-);
-
-create table privilegios(
-	id int primary key auto_increment,
-    nome varchar(20) not null unique
 );
 
 create table relatorio(
