@@ -269,6 +269,7 @@
             text-align: center;
         }
 
+<<<<<<< HEAD
         .mensagem-info {
             color: #374151;
             font-weight: bold;
@@ -276,6 +277,8 @@
             text-align: center;
         }
 
+=======
+>>>>>>> 2cdfa7345c6b0aacfb47bb21fb42210b534519c3
         .paginacao {
             display: flex;
             flex-wrap: wrap;
@@ -367,6 +370,7 @@
             background-color: #bdc3c7;
         }
 
+<<<<<<< HEAD
         .acoes-material {
             display: flex;
             gap: 8px;
@@ -489,6 +493,8 @@
             width: fit-content;
         }
 
+=======
+>>>>>>> 2cdfa7345c6b0aacfb47bb21fb42210b534519c3
         @media (max-width: 900px) {
             .form-material form {
                 grid-template-columns: 1fr;
