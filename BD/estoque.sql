@@ -70,20 +70,6 @@ create table relatorio(
     foreign key (cautela_id) references cautela(id)
 );
 
-SELECT 
-    r.id AS relatorio_numero, 
-    p.nome AS nome_produto, 
-    p.secao AS secao_produto, 
-    u.nome AS nome_usuario, 
-    u.posto AS posto_usuario, 
-    p.data_entrada AS data_entrada, 
-    p.data_saida AS data_saida, 
-    c.status AS status_cautela 
-FROM relatorio r 
-LEFT JOIN produtos p ON r.produto_id = p.id 
-LEFT JOIN usuarios u ON r.usuario_id = u.id 
-LEFT JOIN cautela c ON r.cautela_id = c.id; 
-
 insert into privilegios (nome) values ('Administrador'), ('Usuario');
 insert into secoes (nome) values ('STI'), ('SGO'), ('SSGIE');
 insert into usuarios (nome, senha, posto, secao, privilegio_id) values ('admin', '123', 'admin', 'STI', 1);
