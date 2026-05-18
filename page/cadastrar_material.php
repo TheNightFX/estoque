@@ -2,6 +2,7 @@
 
 include("protect.php");
 include("conexao.php");
+include("registrar_log.php");
 
 $usuario_id = (int) $_SESSION['id'];
 $secao_usuario = "";
@@ -17,10 +18,24 @@ $material_edicao = null;
 
 if(isset($_GET['excluir'])) {
     $material_id = (int) $_GET['excluir'];
+    $sql_material_log = "SELECT * FROM produtos WHERE id = $material_id AND secao = '$secao_usuario_sql' LIMIT 1";
+    $sql_material_log_exec = $mysqli->query($sql_material_log);
+    $material_log = ($sql_material_log_exec && $sql_material_log_exec->num_rows > 0) ? $sql_material_log_exec->fetch_assoc() : null;
     $sql_excluir = "DELETE FROM produtos WHERE id = $material_id AND secao = '$secao_usuario_sql'";
 
     if($mysqli->query($sql_excluir)) {
         $sucesso = "Material excluido com sucesso.";
+        if($material_log) {
+            registrarLog(
+                $mysqli,
+                $secao_usuario,
+                $usuario_id,
+                "EXCLUIU_MATERIAL",
+                "produto",
+                $material_id,
+                "Material excluido: " . $material_log['nome'] . " | Descricao: " . $material_log['descricao'] . " | Quantidade: " . $material_log['quantidade']
+            );
+        }
     } else {
         $erro = "Falha ao excluir material: " . $mysqli->error;
     }
@@ -76,6 +91,16 @@ if(
 
         if($mysqli->query($sql_code)) {
             $sucesso = $acao_form === "editar" ? "Material atualizado com sucesso." : "Material cadastrado com sucesso.";
+            $material_log_id = $acao_form === "editar" ? $material_id_post : $mysqli->insert_id;
+            registrarLog(
+                $mysqli,
+                $secao,
+                $usuario_id,
+                $acao_form === "editar" ? "EDITOU_MATERIAL" : "CADASTROU_MATERIAL",
+                "produto",
+                $material_log_id,
+                "Material: $nome_post | Descricao: $descricao_post | Secao: $secao_post | Quantidade: $quantidade_post | Data entrada: $data_entrada_post | Data saida: $data_saida_post"
+            );
             $material_edicao = null;
         } else {
             $erro = "Falha ao salvar material: " . $mysqli->error;
@@ -245,10 +270,6 @@ $parametros_paginacao = http_build_query([
 
         <a href="home.php">
             <button class="btn-inicio">Inicio</button>
-        </a>
-        
-        <a href="materiais.php">
-            <button class="btn-inicio">Voltar</button>
         </a>
     </div>
 
