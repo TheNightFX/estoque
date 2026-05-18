@@ -44,7 +44,8 @@
 
         /* Campos de Entrada */
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        select {
             background: transparent;
             width: 250px;
             padding: 12px;
@@ -85,4 +86,36 @@
         .footer-links a {
             color: #007bff;
             text-decoration: none;
+        }
+
+        .login .campo-select,
+        .login .selecione {
+            appearance: none !important;
+            -moz-appearance: none !important;
+            -webkit-appearance: none !important;
+            background-color: transparent !important;
+            background-image: linear-gradient(45deg, transparent 50%, #080808 50%), linear-gradient(135deg, #080808 50%, transparent 50%) !important;
+            background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50% !important;
+            background-repeat: no-repeat !important;
+            background-size: 6px 6px, 6px 6px !important;
+            border: none !important;
+            border-bottom: 2px solid #080808 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            color: #1a1a1a !important;
+            cursor: pointer;
+            font-size: 18px !important;
+            margin: 10px 0 !important;
+            outline: none !important;
+            padding: 12px 35px 12px 12px !important;
+            width: 250px !important;
+        }
+
+        .login .campo-select::-ms-expand,
+        .login .selecione::-ms-expand {
+            display: none;
+        }
+
+        .secao-extra {
+            display: none;
         }
