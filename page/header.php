@@ -1,19 +1,33 @@
 <?php
 include('protect.php');
+
+if(!isset($mysqli)) {
+    include('conexao.php');
+}
+
+$usuario_id = (int) $_SESSION['id'];
+$posto_usuario = "";
+$sql_usuario = "SELECT posto FROM usuarios WHERE id = $usuario_id LIMIT 1";
+$sql_usuario_exec = $mysqli->query($sql_usuario);
+
+if($sql_usuario_exec && $dados_usuario = $sql_usuario_exec->fetch_assoc()) {
+    $posto_usuario = $dados_usuario['posto'];
+}
 ?>
 
 <div id="mySidebar" class="sidebar">
-    <a href="home.php"><img src="../image/6cta_logo.png" alt="Logo 6CTA" class="logo"></a>
+    <a href="home.php" class="logo-link"><img src="../image/6cta_logo.png" alt="Logo 6CTA" class="logo"></a>
     <span class="close-btn" onclick="toggleMenu()">×</span>
+    <a href="home.php">Início</a>
     <a href="#">Perfil</a>
-    <a href="cadastro.php">Cadastro Usuario</a>
+    <a href="cadastro.php">Cadastrar usuário</a>
     <a href="#">Configurações</a>
-    <a href="#">Sair</a>
+    <a href="logout.php">Sair</a>
 </div>
 
 <div class="header">
     <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    <div class="welcome-text">Bem-Vindo, <?php echo $_SESSION['nome']; ?></div>
+    <div class="welcome-text">Bem-Vindo, <?php echo htmlspecialchars(trim($posto_usuario . " " . $_SESSION['nome'])); ?></div>
     <div class="user-avatar"></div>
 </div>
 

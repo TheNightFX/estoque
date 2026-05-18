@@ -11,6 +11,11 @@ create table produtos(
     data_saida varchar(25)
 );
 
+create table secoes(
+	id int primary key auto_increment,
+    nome varchar(50) not null unique
+);
+
 create table usuarios(
 	id int primary key auto_increment,
     nome varchar(100) not null,
@@ -35,6 +40,19 @@ create table usuarioCautela(
 create table cautela(
 	id int primary key auto_increment,
     status boolean not null default false
+);
+
+create table cautelas_materiais(
+	id int primary key auto_increment,
+    produto_id int not null,
+    quantidade_cautelada int not null,
+    responsavel_nome varchar(100) not null,
+    responsavel_secao varchar(50) not null,
+    responsavel_telefone varchar(30),
+    data_cautela datetime not null default current_timestamp,
+    data_prevista_devolucao date,
+    data_devolucao datetime,
+    foreign key (produto_id) references produtos(id)
 );
 
 create table privilegios(
@@ -67,5 +85,6 @@ LEFT JOIN usuarios u ON r.usuario_id = u.id
 LEFT JOIN cautela c ON r.cautela_id = c.id; 
 
 insert into privilegios (nome) values ('Administrador'), ('Usuario');
+insert into secoes (nome) values ('STI'), ('SGO'), ('SSGIE');
 insert into usuarios (nome, senha, posto, secao, privilegio_id) values ('admin', '123', 'admin', 'STI', 1);
 select * from usuarios;
