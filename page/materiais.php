@@ -2,6 +2,7 @@
 
 include("protect.php");
 include("conexao.php");
+include("formatar_data.php");
 
 $usuario_id = (int) $_SESSION['id'];
 $secao_usuario = "";
@@ -118,13 +119,13 @@ $parametros_paginacao = http_build_query([
                 <tbody id="tabela-corpo">
                     <?php while($material = $sql_materiais_query_exec->fetch_assoc()) { ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($material['id'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($material['nome'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($material['descricao'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($material['secao'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($material['quantidade'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($material['data_entrada'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($material['data_saida'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($material['id']); ?></td>
+                        <td><?php echo htmlspecialchars($material['nome']); ?></td>
+                        <td><?php echo htmlspecialchars($material['descricao']); ?></td>
+                        <td><?php echo htmlspecialchars($material['secao']); ?></td>
+                        <td><?php echo htmlspecialchars($material['quantidade']); ?></td>
+                        <td><?php echo htmlspecialchars(formatarDataHora($material['data_entrada'])); ?></td>
+                        <td><?php echo htmlspecialchars(formatarDataHora($material['data_saida'])); ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>

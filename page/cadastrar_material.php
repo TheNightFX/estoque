@@ -3,6 +3,7 @@
 include("protect.php");
 include("conexao.php");
 include("registrar_log.php");
+include("formatar_data.php");
 
 $usuario_id = (int) $_SESSION['id'];
 $secao_usuario = "";
@@ -55,8 +56,7 @@ if(
     isset($_POST['nome']) &&
     isset($_POST['descricao']) &&
     isset($_POST['secao']) &&
-    isset($_POST['quantidade']) &&
-    isset($_POST['data_entrada'])
+    isset($_POST['quantidade'])
 ) {
     $acao_form = isset($_POST['acao']) ? $_POST['acao'] : "cadastrar";
     $material_id_post = isset($_POST['material_id']) ? (int) $_POST['material_id'] : 0;
@@ -64,8 +64,8 @@ if(
     $descricao_post = trim($_POST['descricao']);
     $secao_post = trim($_POST['secao']);
     $quantidade_post = trim($_POST['quantidade']);
-    $data_entrada_post = trim($_POST['data_entrada']);
-    $data_saida_post = isset($_POST['data_saida']) ? trim($_POST['data_saida']) : "";
+    $data_entrada_post = date("Y-m-d H:i:s");
+    $data_saida_post = "";
 
     if(empty($nome_post)) {
         $erro = "Preencha o nome do material.";
@@ -73,8 +73,6 @@ if(
         $erro = "Preencha a secao do material.";
     } else if($quantidade_post === "" || !is_numeric($quantidade_post) || $quantidade_post < 0) {
         $erro = "Preencha uma quantidade valida.";
-    } else if(empty($data_entrada_post)) {
-        $erro = "Preencha a data de entrada.";
     } else {
         $nome = $mysqli->real_escape_string($nome_post);
         $descricao = $mysqli->real_escape_string($descricao_post);
@@ -84,7 +82,7 @@ if(
         $data_saida = $mysqli->real_escape_string($data_saida_post);
 
         if($acao_form === "editar" && $material_id_post > 0) {
-            $sql_code = "UPDATE produtos SET nome = '$nome', descricao = '$descricao', secao = '$secao', quantidade = $quantidade, data_entrada = '$data_entrada', data_saida = '$data_saida' WHERE id = $material_id_post AND secao = '$secao_usuario_sql'";
+            $sql_code = "UPDATE produtos SET nome = '$nome', descricao = '$descricao', secao = '$secao', quantidade = $quantidade WHERE id = $material_id_post AND secao = '$secao_usuario_sql'";
         } else {
             $sql_code = "INSERT INTO produtos (nome, descricao, secao, quantidade, data_entrada, data_saida) VALUES ('$nome', '$descricao', '$secao', $quantidade, '$data_entrada', '$data_saida')";
         }
@@ -99,7 +97,7 @@ if(
                 $acao_form === "editar" ? "EDITOU_MATERIAL" : "CADASTROU_MATERIAL",
                 "produto",
                 $material_log_id,
-                "Material: $nome_post | Descricao: $descricao_post | Secao: $secao_post | Quantidade: $quantidade_post | Data entrada: $data_entrada_post | Data saida: $data_saida_post"
+                "Material: $nome_post | Descricao: $descricao_post | Secao: $secao_post | Quantidade: $quantidade_post | Data entrada: " . formatarDataHora($data_entrada_post)
             );
             $material_edicao = null;
         } else {
@@ -179,8 +177,6 @@ $parametros_paginacao = http_build_query([
                 <textarea name="descricao" placeholder="Descricao"><?php echo $material_edicao ? htmlspecialchars($material_edicao['descricao']) : ""; ?></textarea>
                 <input name="secao" type="text" placeholder="Secao" value="<?php echo $material_edicao ? htmlspecialchars($material_edicao['secao']) : htmlspecialchars($secao_usuario); ?>" required>
                 <input name="quantidade" type="number" placeholder="Quantidade" min="0" value="<?php echo $material_edicao ? htmlspecialchars($material_edicao['quantidade']) : ""; ?>" required>
-                <input name="data_entrada" type="date" value="<?php echo $material_edicao ? htmlspecialchars($material_edicao['data_entrada']) : ""; ?>" required>
-                <input name="data_saida" type="date" value="<?php echo $material_edicao ? htmlspecialchars($material_edicao['data_saida']) : ""; ?>">
                 <button type="submit" class="btn-cadastro"><?php echo $material_edicao ? "Salvar Alteracoes" : "Cadastrar Material"; ?></button>
                 <?php if($material_edicao) { ?>
                     <a href="cadastrar_material.php" class="btn-cancelar">Cancelar</a>
@@ -236,7 +232,7 @@ $parametros_paginacao = http_build_query([
                         <td><?php echo htmlspecialchars($material['descricao']); ?></td>
                         <td><?php echo htmlspecialchars($material['secao']); ?></td>
                         <td><?php echo htmlspecialchars($material['quantidade']); ?></td>
-                        <td><?php echo htmlspecialchars($material['data_entrada']); ?></td>
+                        <td><?php echo htmlspecialchars(formatarDataHora($material['data_entrada'])); ?></td>
                         <td>
                             <div class="acoes-material">
                                 <a class="btn-editar" href="?editar=<?php echo htmlspecialchars($material['id']); ?>&<?php echo $parametros_paginacao; ?>">Editar</a>

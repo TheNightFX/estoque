@@ -1,19 +1,17 @@
 <?php
-// 1. Carrega o Dompdf usando o caminho absoluto baseado na raiz do projeto
+
 require_once dirname(__DIR__) . '/libs/dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-// 2. Conecta ao banco de dados
-include ("conexao.php");
-include ("protect.php");
+include("protect.php");
+include("conexao.php");
+include("formatar_data.php");
 
 if ($mysqli->connect_error) {
-    die("Falha na conexão: " . $mysqli->connect_error);
+    die("Falha na conexao: " . $mysqli->connect_error);
 }
-
-// 2.1 peguando a seção do usuario
 
 $usuario_id = (int) $_SESSION['id'];
 $secao_usuario = "";
@@ -24,18 +22,37 @@ if($sql_usuario_exec && $dados_usuario = $sql_usuario_exec->fetch_assoc()) {
     $secao_usuario = $dados_usuario['secao'];
 }
 
-// 3. Captura o ID da cautela via GET enviado após o salvamento
+$secao_usuario_sql = $mysqli->real_escape_string($secao_usuario);
 $cautela_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-if ($cautela_id === 0) {
-    die("Erro: ID de cautela inválido ou não informado.");
+if($cautela_id === 0) {
+    die("Erro: ID de cautela invalido ou nao informado.");
 }
 
-// 4. Busca os dados da cautela cruzando com a tabela de produtos
+$sql_base = "
+    SELECT cm.grupo_id
+    FROM cautelas_materiais cm
+    INNER JOIN produtos p ON cm.produto_id = p.id
+    WHERE cm.id = $cautela_id
+    AND p.secao = '$secao_usuario_sql'
+    LIMIT 1
+";
+$resultado_base = $mysqli->query($sql_base);
+
+if(!$resultado_base || $resultado_base->num_rows === 0) {
+    die("Erro: Cautela nao encontrada no sistema para o ID " . $cautela_id);
+}
+
+$base = $resultado_base->fetch_assoc();
+$grupo_id = !empty($base['grupo_id']) ? (int) $base['grupo_id'] : 0;
+$where_cautela = $grupo_id > 0 ? "cm.grupo_id = $grupo_id" : "cm.id = $cautela_id";
+
 $sql_cautela = "
-    SELECT 
+    SELECT
         cm.id,
+        cm.grupo_id,
         p.nome AS material_nome,
+        p.descricao AS material_descricao,
         cm.quantidade_cautelada,
         cm.responsavel_nome,
         cm.responsavel_secao,
@@ -44,41 +61,51 @@ $sql_cautela = "
         cm.data_prevista_devolucao
     FROM cautelas_materiais cm
     INNER JOIN produtos p ON cm.produto_id = p.id
-    WHERE cm.id = $cautela_id
-    LIMIT 1
+    WHERE $where_cautela
+    AND p.secao = '$secao_usuario_sql'
+    ORDER BY cm.id ASC
 ";
 
 $resultado = $mysqli->query($sql_cautela);
 
-if (!$resultado || $resultado->num_rows === 0) {
-    die("Erro: Cautela não encontrada no sistema para o ID " . $cautela_id);
+if(!$resultado || $resultado->num_rows === 0) {
+    die("Erro: Cautela nao encontrada no sistema.");
 }
 
-// Definição crucial da variável $dados para todo o arquivo
-$dados = $resultado->fetch_assoc();
+$itens = [];
+while($item = $resultado->fetch_assoc()) {
+    $itens[] = $item;
+}
 
-// Tratamento rigoroso de nulos para compatibilidade com PHP 8+
+$dados = $itens[0];
 $data_cautela_crua = $dados['data_cautela'] ?? date('Y-m-d H:i:s');
-$data_cautela_formatada = date('d/m/Y', strtotime($data_cautela_crua));
-
+$data_cautela_formatada = formatarData($data_cautela_crua);
 $data_prevista_crua = $dados['data_prevista_devolucao'] ?? '';
-$data_devolucao_prevista = !empty($data_prevista_crua) ? date('d/m/Y', strtotime($data_prevista_crua)) : '________________________';
+$data_devolucao_prevista = !empty($data_prevista_crua) ? formatarData($data_prevista_crua) : '________________________';
 
-// Mapeamento de meses seguro contra erros
 $meses_nome = [
-    '01' => 'janeiro', '02' => 'fevereiro', '03' => 'março', '04' => 'abril',
+    '01' => 'janeiro', '02' => 'fevereiro', '03' => 'marco', '04' => 'abril',
     '05' => 'maio', '06' => 'junho', '07' => 'julho', '08' => 'agosto',
     '09' => 'setembro', '10' => 'outubro', '11' => 'novembro', '12' => 'dezembro'
 ];
 $mes_cautela = date('m', strtotime($data_cautela_crua));
 $nome_mes = $meses_nome[$mes_cautela] ?? 'janeiro';
 
-// 5. Configura o mecanismo do Dompdf
 $options = new Options();
-$options->set('isHtml5ParserEnabled', true); 
+$options->set('isHtml5ParserEnabled', true);
 $dompdf = new Dompdf($options);
 
-// 6. Monta a estrutura HTML/CSS do modelo militar
+$linhas_materiais = "";
+$contador = 1;
+foreach($itens as $item) {
+    $linhas_materiais .= '<tr>
+        <td class="col-id">' . str_pad($contador, 2, "0", STR_PAD_LEFT) . '</td>
+        <td class="col-desc"><strong>' . htmlspecialchars($item['material_nome'] ?? '') . '</strong><br>' . htmlspecialchars($item['material_descricao'] ?? '') . '</td>
+        <td class="col-qtd">' . htmlspecialchars($item['quantidade_cautelada'] ?? '0') . '</td>
+    </tr>';
+    $contador++;
+}
+
 $html = '
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -107,61 +134,45 @@ $html = '
 <body>
 
     <div class="cabecalho">
-        MINISTÉRIO DA DEFESA<br>
-        EXÉRCITO BRASILEIRO<br>
+        MINISTERIO DA DEFESA<br>
+        EXERCITO BRASILEIRO<br>
         COMANDO MILITAR DO OESTE<br>
-        6º CENTRO DE TELEMÁTICA DE ÁREA
+        6 CENTRO DE TELEMATICA DE AREA
     </div>
 
     <div class="titulo-documento">
-        CAUTELA DE MATERIAL  - ' . date('Y', strtotime($data_cautela_crua)) . '
+        CAUTELA DE MATERIAL - ' . date('Y', strtotime($data_cautela_crua)) . '
     </div>
 
     <div class="texto-compromisso">
-        Recebi e conferi o material abaixo discriminado, o qual ficará sob minha responsabilidade, devendo o mesmo ser por mim mantido e imediatamente devolvido na ' . htmlspecialchars($secao_usuario) . ' do 6º CTA, ao término da utilização/missão.
+        Recebi e conferi o material abaixo discriminado, o qual ficara sob minha responsabilidade, devendo o mesmo ser por mim mantido e imediatamente devolvido na ' . htmlspecialchars($secao_usuario) . ' do 6 CTA, ao termino da utilizacao/missao.
     </div>
 
     <table>
         <thead>
             <tr>
                 <th class="col-id">Nr ordem</th>
-                <th class="col-desc">Discriminação do material</th>
+                <th class="col-desc">Discriminacao do material</th>
                 <th class="col-qtd">Qtde</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="col-id">01</td>
-                <td class="col-desc"><strong>' . htmlspecialchars($dados['material_nome'] ?? '') . '</strong></td>
-                <td class="col-qtd">' . htmlspecialchars($dados['quantidade_cautelada'] ?? '0') . '</td>
-            </tr>';
-
-// Gera as linhas complementares em branco de forma segura
-for ($i = 2; $i <= 5; $i++) {
-    $html .= '<tr>
-        <td class="col-id" style="height: 22px;">' . str_pad($i, 2, "0", STR_PAD_LEFT) . '</td>
-        <td class="col-desc"></td>
-        <td class="col-qtd"></td>
-    </tr>';
-}
-
-
-$html .= '
+            ' . $linhas_materiais . '
         </tbody>
     </table>
 
     <div class="info-retorno">
-        PREVISÃO DE RETORNO: ' . $data_devolucao_prevista . '<br>
+        PREVISAO DE RETORNO: ' . $data_devolucao_prevista . '<br>
         DESTINO: ' . htmlspecialchars($dados['responsavel_secao'] ?? '') . '
     </div>
 
     <div class="data-local">
-        6º CTA, ' . date('d', strtotime($data_cautela_crua)) . ' de ' . $nome_mes . ' de ' . date('Y', strtotime($data_cautela_crua)) . '.
+        6 CTA, ' . date('d', strtotime($data_cautela_crua)) . ' de ' . $nome_mes . ' de ' . date('Y', strtotime($data_cautela_crua)) . '.
     </div>
 
     <div class="dados-militar">
         Nome Completo: ' . htmlspecialchars($dados['responsavel_nome'] ?? '') . '<br>
-        Seção:         ' . htmlspecialchars($dados['responsavel_secao'] ?? '') . '<br>
+        Secao:         ' . htmlspecialchars($dados['responsavel_secao'] ?? '') . '<br>
         Tel Contato:   ' . htmlspecialchars($dados['responsavel_telefone'] ?? '') . '<br>
     </div>
 
@@ -169,13 +180,13 @@ $html .= '
         <div class="col-esquerda">
             <br><br>
             <div class="assinatura-linha">
-                Militar Responsável
+                Militar Responsavel
             </div>
         </div>
         <div class="col-direita">
             <br><br>
             <div class="assinatura-linha">
-                ' . htmlspecialchars($secao_usuario) . ' - 6º CTA<br>
+                ' . htmlspecialchars($secao_usuario) . ' - 6 CTA<br>
                 <small>No impedimento</small>
             </div>
         </div>
@@ -184,7 +195,6 @@ $html .= '
 </body>
 </html>';
 
-// 7. Renderização limpa do Dompdf
 while (ob_get_level()) {
     ob_end_clean();
 }
@@ -194,6 +204,7 @@ $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
-$dompdf->stream("cautela_material_" . $cautela_id . ".pdf", array("Attachment" => false));
+$dompdf->stream("cautela_material_" . $cautela_id . ".pdf", ["Attachment" => false]);
 exit();
+
 ?>

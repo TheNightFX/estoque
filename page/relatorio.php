@@ -3,6 +3,16 @@
 include("protect.php");
 include("conexao.php");
 include("registrar_log.php");
+include("formatar_data.php");
+
+$nomes_acoes = [
+    "CADASTROU_MATERIAL" => "Cadastro de Material",
+    "EDITOU_MATERIAL" => "Edicao de Material",
+    "EXCLUIU_MATERIAL" => "Exclusao de Material",
+    "CAUTELOU_MATERIAL" => "Cautela de Material",
+    "EDITOU_CAUTELA" => "Edicao de Cautela",
+    "MARCOU_DEVOLUCAO" => "Devolucao de Material"
+];
 
 $usuario_id = (int) $_SESSION['id'];
 $secao_usuario = "";
@@ -78,11 +88,11 @@ $parametros_paginacao = http_build_query([
     <?php include ("header.php");?>
 
     <div class="main-content">
-        <h2 class="titulo-relatorio">Relatorio de movimentacoes - <?php echo htmlspecialchars($secao_usuario); ?></h2>
+        <h2 class="titulo-relatorio">Relatório de movimentações - <?php echo htmlspecialchars($secao_usuario); ?></h2>
 
         <form class="controle-paginacao" action="" method="GET">
             <div class="campo-pesquisa">
-                <label for="busca">Pesquisar movimentacao:</label>
+                <label for="busca">Pesquisar movimentação:</label>
                 <input
                     type="text"
                     name="busca"
@@ -93,7 +103,7 @@ $parametros_paginacao = http_build_query([
             </div>
 
             <div class="campo-limite">
-                <label for="limite">Itens por pagina:</label>
+                <label for="limite">Itens por página:</label>
                 <select name="limite" id="limite">
                     <?php foreach($opcoes_limite as $limite) { ?>
                         <option value="<?php echo $limite; ?>" <?php echo $limite == $itens_por_pagina ? 'selected' : ''; ?>>
@@ -113,9 +123,9 @@ $parametros_paginacao = http_build_query([
                     <tr>
                         <th style="width: 5%;">Nº</th>
                         <th style="width: 12%;">Data/Hora</th>
-                        <th style="width: 14%;">Usuario</th>
-                        <th style="width: 10%;">Secao</th>
-                        <th style="width: 14%;">Acao</th>
+                        <th style="width: 14%;">Usuário</th>
+                        <th style="width: 10%;">Seção</th>
+                        <th style="width: 14%;">Ação</th>
                         <th style="width: 10%;">Tipo</th>
                         <th style="width: 35%;">Detalhes</th>
                     </tr>
@@ -124,10 +134,10 @@ $parametros_paginacao = http_build_query([
                     <?php while($log = $sql_logs_query_exec->fetch_assoc()) { ?>
                     <tr>
                         <td><?php echo $numero_linha; ?></td>
-                        <td><?php echo htmlspecialchars($log['data_log']); ?></td>
+                        <td><?php echo htmlspecialchars(formatarDataHora($log['data_log'])); ?></td>
                         <td><?php echo htmlspecialchars($log['usuario_nome']); ?></td>
                         <td><?php echo htmlspecialchars($log['secao']); ?></td>
-                        <td><?php echo htmlspecialchars($log['acao']); ?></td>
+                        <td><?php echo htmlspecialchars($nomes_acoes[$log['acao']] ?? $log['acao']); ?></td>
                         <td><?php echo htmlspecialchars($log['entidade']); ?></td>
                         <td><?php echo htmlspecialchars($log['detalhes']); ?></td>
                     </tr>

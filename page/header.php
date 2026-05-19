@@ -17,16 +17,17 @@ if($sql_usuario_exec && $dados_usuario = $sql_usuario_exec->fetch_assoc()) {
 
 <div id="mySidebar" class="sidebar">
     <a href="home.php" class="logo-link"><img src="../image/6cta_logo.png" alt="Logo 6CTA" class="logo"></a>
-    <span class="close-btn" onclick="toggleMenu()">×</span>
-    <a href="home.php">Início</a>
+    <span class="close-btn" onclick="toggleMenu()">x</span>
+    <a href="home.php">Inicio</a>
     <a href="#">Perfil</a>
-    <a href="cadastro.php">Cadastrar usuário</a>
-    <a href="#">Configurações</a>
+    <a href="cadastro.php">Cadastrar usuario</a>
+    <a href="relatorio.php">Relatorio</a>
+    <a href="#">Configuracoes</a>
     <a href="logout.php">Sair</a>
 </div>
 
 <div class="header">
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
     <div class="welcome-text">Bem-Vindo, <?php echo htmlspecialchars(trim($posto_usuario . " " . $_SESSION['nome'])); ?></div>
     <div class="user-avatar"></div>
 </div>

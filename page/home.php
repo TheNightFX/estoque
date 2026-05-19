@@ -2,6 +2,7 @@
 
 include("protect.php");
 include("conexao.php");
+include("formatar_data.php");
 
 $usuario_id = (int) $_SESSION['id'];
 $secao_usuario = "";
@@ -76,7 +77,7 @@ if($sql_tabela_cautelas && $sql_tabela_cautelas->num_rows > 0) {
                             <span>Responsavel: <?php echo htmlspecialchars($aviso['responsavel_nome']); ?></span>
                             <span>Secao: <?php echo htmlspecialchars($aviso['responsavel_secao']); ?></span>
                             <span>Telefone: <?php echo htmlspecialchars($aviso['responsavel_telefone']); ?></span>
-                            <span>Devolucao prevista: <?php echo htmlspecialchars($aviso['data_prevista_devolucao']); ?></span>
+                            <span>Devolucao prevista: <?php echo htmlspecialchars(formatarData($aviso['data_prevista_devolucao'])); ?></span>
                         </div>
                     <?php } ?>
                 </div>
