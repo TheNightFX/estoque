@@ -20,9 +20,9 @@ if($sql_usuario_exec && $dados_usuario = $sql_usuario_exec->fetch_assoc()) {
     <span class="close-btn" onclick="toggleMenu()">x</span>
     <a href="home.php">Inicio</a>
     <a href="#">Perfil</a>
-    <a href="cadastro.php">Cadastrar usuario</a>
-    <a href="relatorio.php">Relatorio</a>
-    <a href="#">Configuracoes</a>
+    <a href="cadastro.php">Cadastrar usuário</a>
+    <a href="relatorio.php">Relatório</a>
+    <a href="usuarios.php">Usuários</a>
     <a href="logout.php">Sair</a>
 </div>
 
